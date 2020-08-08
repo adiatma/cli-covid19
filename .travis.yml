@@ -1,11 +1,57 @@
 language: rust
 
-deploy:
-  provider: cargo
-  token: $CARGO_TOKEN
-  on:
-    tags: true
+DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
+  before_deploy:
+    - git config --local user.name "adiatma"
+    - git config --local user.email "adiatma9024@gmail.com"
+    - name="cli-covid19-$TRAVIS_TAG-$TARGET"
+    - mkdir $name
+    - cp target/$TARGET/release/cli-covid19 /$name
+    - tar czvf $name.tar.gz $name
+  deploy:
+    provider: releases
+    api_key: $GITHUB_API_KEY
+    file: cli-covid19-$TRAVIS_TAG-$TARGET.tar.gz
+    skip_cleanup: true
+    on:
+      branch: master
+      tags: true
 
-scripts:
-  - cargo build --verbose --all
- 
+jobs:
+  include:
+  - name: Build & Tests
+    script:
+    - cargo build --verbose --all
+    - cargo test
+  
+  - name: Release to crate
+    deploy:
+      provider: cargo
+      token: $CARGO_TOKEN
+      on:
+        branch: master
+        tags: true
+  
+  - name: Linux Binary
+    env: TARGET=x86_64-unknown-linux-musl
+    rust: nightly
+    before_script: rustup target add $TARGET
+    script: cargo build --release --target $TARGET --locked --features vendored-openssl
+    addons:
+      apt:
+        packages:
+          - musl-tools
+    <<: *DEPLOY_TO_GITHUB
+
+  - name: macOS Binary
+    env: MACOSX_DEPLOYMENT_TARGET=10.7 TARGET=x86_64-apple-darwin
+    os: osx
+    rust: nightly
+    script: cargo build --release --target $TARGET --locked
+    install: true
+    <<: *DEPLOY_TO_GITHUB
+
+notifications:
+  email:
+    on_success: never
+

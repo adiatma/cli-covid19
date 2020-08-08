@@ -3,6 +3,8 @@ name = "cli-covid19"
 version = "0.1.0"
 authors = ["Adiatma Kamarudin <adiatma9024@gmail.com>"]
 edition = "2018"
+description = "CLI to get daily report covid19 by countries"
+license = "MIT OR Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
