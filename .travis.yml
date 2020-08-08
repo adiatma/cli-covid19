@@ -1,14 +1,10 @@
 language: rust
 
-rust:
-  - stable
-  - beta
-  - nightly
-
-jobs:
-  allow_failures:
-    - rust: nightly
-  fast_finish: true
-
-script:
-  - cargo build --verbose --all
+deploy:
+  provider: cargo
+  token: $CARGO_TOKEN
+  script:
+    - cargo build
+  on:
+    tags: true
+ 
