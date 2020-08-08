@@ -3,8 +3,9 @@ language: rust
 deploy:
   provider: cargo
   token: $CARGO_TOKEN
-  script:
-    - cargo build
   on:
     tags: true
+
+scripts:
+  - cargo build --verbose --all
  
