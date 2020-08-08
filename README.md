@@ -1,6 +1,6 @@
 # cli-covid19
 
-![](./cli-covid19.gif)
+![](./how-to-usage.png)
 
 ## How to use?
 
