@@ -14,7 +14,7 @@ DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
     - git config --local user.email "adiatma9024@gmail.com"
     - name="cli-covid19-$TRAVIS_TAG-$TARGET"
     - mkdir $name
-    - cp target/$TARGET/release/cli-covid19 /$name
+    - cp target/$TARGET/release/cli-covid19 $name/
     - tar czvf $name.tar.gz $name
   deploy:
     provider: releases
