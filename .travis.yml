@@ -6,16 +6,14 @@ cache:
     - /home/travis/.cargo
 
 GH_TOKEN: &GH_TOKEN
-  secure: $GITHUB_API_KEY
+  secure: $GITHUB_API_TOKEN
 
 DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
   before_deploy:
-    - git config --local user.name "adiatma"
+    - git config --local user.name "Adiatma Kamarudin"
     - git config --local user.email "adiatma9024@gmail.com"
     - name="cli-covid19-$TRAVIS_TAG-$TARGET"
     - mkdir $name
-    - chmod 0555 $name
-    - chmod 0555 target/$TARGET/release/cli-covid19  
     - cp target/$TARGET/release/cli-covid19 /$name
     - tar czvf $name.tar.gz $name
   deploy:
@@ -37,6 +35,7 @@ RELEASE_TO_CRATE: &RELEASE_TO_CRATE
 
 jobs:
   include:
+  
   - stage: "Testing"
     name: Tests
     env: RUST_BACKTRACE=1
