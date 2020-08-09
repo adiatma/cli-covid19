@@ -5,9 +5,6 @@ cache:
   directories:
     - /home/travis/.cargo
 
-GH_TOKEN: &GH_TOKEN
-  secure: $GITHUB_API_TOKEN
-
 DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
   before_deploy:
     - git config --local user.name "Adiatma Kamarudin"
@@ -18,7 +15,7 @@ DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
     - tar czvf $name.tar.gz $name
   deploy:
     provider: releases
-    api_key: *GH_TOKEN
+    api_key: $GITHUB_API_TOKEN
     file: cli-covid19-$TRAVIS_TAG-$TARGET.tar.gz
     skip_cleanup: true
     on:
