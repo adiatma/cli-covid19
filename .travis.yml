@@ -50,7 +50,7 @@ jobs:
     env: TARGET=x86_64-unknown-linux-musl
     rust: stable
     before_script: rustup target add $TARGET
-    script: cargo build --release --target $TARGET
+    script: cargo build --release --target $TARGET --features vendored-openssl
     addons:
       apt:
         packages:
