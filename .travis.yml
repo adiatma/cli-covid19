@@ -1,6 +1,10 @@
 language: rust
 sudo: true
 
+cache:
+  directories:
+    - /home/travis/.cargo
+
 DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
   before_deploy:
     - git config --local user.name "adiatma"
