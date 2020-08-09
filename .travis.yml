@@ -33,12 +33,12 @@ RELEASE_TO_CRATE: &RELEASE_TO_CRATE
 jobs:
   include:
   
-  - stage: "Testing"
+  - stage: "Testing & Build"
     name: Tests
     env: RUST_BACKTRACE=1
     rust: stable
     script:
-    - cargo test
+    - cargo build
   
   - stage: "Release" 
     name: Release to crate
@@ -50,7 +50,7 @@ jobs:
     env: TARGET=x86_64-unknown-linux-musl
     rust: stable
     before_script: rustup target add $TARGET
-    script: cargo build --release --target $TARGET --features vendored-openssl
+    script: cargo build --release --target $TARGET
     addons:
       apt:
         packages:
