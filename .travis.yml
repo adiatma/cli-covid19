@@ -1,4 +1,5 @@
 language: rust
+sudo: true
 
 DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
   before_deploy:
@@ -19,10 +20,14 @@ DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
 
 jobs:
   include:
-  - name: Build & Tests
+  - name: Tests
+    env: RUST_BACKTRACE=1
+    rust: nightly
     script:
-    - cargo build --verbose --all
-    - cargo test
+    - cargo test --locked
+    - rustup component add rustfmt-preview
+    - cargo fmt --version
+    - cargo fmt --all -- --check
   
   - name: Release to crate
     deploy:
