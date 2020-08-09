@@ -5,42 +5,52 @@ cache:
   directories:
     - /home/travis/.cargo
 
+GH_TOKEN: &GH_TOKEN
+  secure: $GITHUB_API_KEY
+
 DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
   before_deploy:
     - git config --local user.name "adiatma"
     - git config --local user.email "adiatma9024@gmail.com"
     - name="cli-covid19-$TRAVIS_TAG-$TARGET"
     - mkdir $name
-    - chmod +x $name
-    - chmod +x target
+    - chmod 0555 $name
+    - chmod 0555 target/$TARGET/release/cli-covid19  
     - cp target/$TARGET/release/cli-covid19 /$name
     - tar czvf $name.tar.gz $name
   deploy:
     provider: releases
-    api_key: $GITHUB_API_KEY
+    api_key: *GH_TOKEN
     file: cli-covid19-$TRAVIS_TAG-$TARGET.tar.gz
     skip_cleanup: true
     on:
       branch: master
       tags: true
 
+RELEASE_TO_CRATE: &RELEASE_TO_CRATE
+  deploy:
+    provider: cargo
+    token: $CARGO_TOKEN
+    on:
+      branch: master
+      tags: true
+
 jobs:
   include:
-  - name: Tests
+  - stage: "Testing"
+    name: Tests
     env: RUST_BACKTRACE=1
-    rust: nightly
+    rust: stable
     script:
     - cargo test
   
-  - name: Release to crate
-    deploy:
-      provider: cargo
-      token: $CARGO_TOKEN
-      on:
-        branch: master
-        tags: true
+  - stage: "Release" 
+    name: Release to crate
+    rust: stable
+    <<: *RELEASE_TO_CRATE
   
-  - name: Linux Binary
+  - stage: "Release"
+    name: Linux Binary
     env: TARGET=x86_64-unknown-linux-musl
     rust: stable
     before_script: rustup target add $TARGET
@@ -51,7 +61,8 @@ jobs:
           - musl-tools
     <<: *DEPLOY_TO_GITHUB
 
-  - name: macOS Binary
+  - stage: "Release" 
+    name: macOS Binary
     env: MACOSX_DEPLOYMENT_TARGET=10.7 TARGET=x86_64-apple-darwin
     os: osx
     rust: stable
