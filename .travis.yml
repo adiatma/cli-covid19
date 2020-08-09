@@ -11,6 +11,8 @@ DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
     - git config --local user.email "adiatma9024@gmail.com"
     - name="cli-covid19-$TRAVIS_TAG-$TARGET"
     - mkdir $name
+    - chmod +x $name
+    - chmod +x target
     - cp target/$TARGET/release/cli-covid19 /$name
     - tar czvf $name.tar.gz $name
   deploy:
@@ -40,7 +42,7 @@ jobs:
   
   - name: Linux Binary
     env: TARGET=x86_64-unknown-linux-musl
-    rust: nightly
+    rust: stable
     before_script: rustup target add $TARGET
     script: cargo build --release --target $TARGET --features vendored-openssl
     addons:
@@ -52,7 +54,7 @@ jobs:
   - name: macOS Binary
     env: MACOSX_DEPLOYMENT_TARGET=10.7 TARGET=x86_64-apple-darwin
     os: osx
-    rust: nightly
+    rust: stable
     script: cargo build --release --target $TARGET
     install: true
     <<: *DEPLOY_TO_GITHUB
