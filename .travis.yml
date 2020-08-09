@@ -25,9 +25,6 @@ jobs:
     rust: nightly
     script:
     - cargo test --locked
-    - rustup component add rustfmt-preview
-    - cargo fmt --version
-    - cargo fmt --all -- --check
   
   - name: Release to crate
     deploy:
