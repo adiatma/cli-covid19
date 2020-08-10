@@ -1,5 +1,6 @@
 use chrono::DateTime;
 use colored::*;
+use prettytable::{cell, row, Table};
 use reqwest::blocking::{Client, Request};
 use reqwest::Method;
 use serde_json::{from_str as json_from_str, Value as JsonValue};
@@ -24,35 +25,39 @@ pub fn init(country: String) {
     let response_json: JsonValue = json_from_str(&response.text().unwrap()).unwrap();
     let response_map = response_json.as_object().unwrap().to_owned();
 
-    println!(
-        "Update: {}",
-        DateTime::parse_from_rfc3339(response_map["lastUpdate"].as_str().unwrap()).unwrap()
-    );
+    let mut table = Table::new();
 
-    println!(
-        "Confirmed: {}",
+    table.add_row(row![
+        "Last Update",
+        DateTime::parse_from_rfc3339(response_map["lastUpdate"].as_str().unwrap()).unwrap()
+    ]);
+
+    table.add_row(row![
+        "Confirmed",
         response_map["confirmed"].as_object().unwrap()["value"]
             .as_i64()
             .unwrap()
             .to_string()
             .yellow()
-    );
+    ]);
 
-    println!(
-        "Recovered: {}",
+    table.add_row(row![
+        "Recovered",
         response_map["recovered"].as_object().unwrap()["value"]
             .as_i64()
             .unwrap()
             .to_string()
             .green()
-    );
+    ]);
 
-    println!(
-        "Deaths: {}",
+    table.add_row(row![
+        "Deaths",
         response_map["deaths"].as_object().unwrap()["value"]
             .as_i64()
             .unwrap()
             .to_string()
             .red()
-    );
+    ]);
+
+    table.printstd();
 }
