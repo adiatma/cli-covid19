@@ -1,6 +1,6 @@
 [package]
 name = "cli-covid19"
-version = "0.2.6"
+version = "0.2.7"
 authors = ["Adiatma Kamarudin <adiatma9024@gmail.com>"]
 edition = "2018"
 description = "CLI to get daily report covid19 by countries"

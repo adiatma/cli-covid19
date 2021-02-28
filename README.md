@@ -1,8 +1,6 @@
 # cli-covid19
 
-[![asciicast](https://asciinema.org/a/WyouJNO8OzC6K9IcJCMKlQJ0p.svg)](https://asciinema.org/a/WyouJNO8OzC6K9IcJCMKlQJ0p)
-
-Simple CLI (command line interface) to get update covid19 report by country in your terminal.
+Simple CLI (Command Line Interface) to get covid19 reporting by country
 
 ## Install
 
