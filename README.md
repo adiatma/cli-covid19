@@ -1,6 +1,6 @@
 # cli-covid19
 
-Simple CLI (Command Line Interface) to get covid19 reporting by country
+Simple CLI (Command Line Interface) to get covid19 report by country
 
 ## Install
 
